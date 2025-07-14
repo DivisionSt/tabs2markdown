@@ -326,3 +326,42 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
+
+.tab-close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 8px;
+    font-size: 16px;
+    color: #666;
+    border-radius: 3px;
+}
+
+.tab-close-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.error-message {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: none;
+}
+
+.tab-close-error {
+    background-color: #ffeaa7;
+    border-left: 3px solid #fdcb6e;
+    animation: errorShake 0.5s ease-in-out;
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}

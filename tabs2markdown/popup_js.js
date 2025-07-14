@@ -1,4 +1,4 @@
-class TabsToMarkdown {
+class Tabs2Markdown {
     constructor() {
         this.tabs = [];
         this.selectedTabs = new Set();
@@ -132,12 +132,106 @@ class TabsToMarkdown {
             indicator.appendChild(pinnedIndicator);
         }
 
+        // Add close button
+        const closeButton = document.createElement('button');
+        closeButton.className = 'tab-close-button';
+        closeButton.textContent = '×';
+        closeButton.title = 'Close tab';
+        closeButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event bubbling
+            this.closeTab(tab.id, tabItem);
+        });
+
         tabItem.appendChild(checkbox);
         tabItem.appendChild(favicon);
         tabItem.appendChild(tabInfo);
         tabItem.appendChild(indicator);
+        tabItem.appendChild(closeButton);
 
         return tabItem;
+    }
+
+    closeTab(tabId, tabItemElement) {
+        // Store the tab data and parent element for potential restoration
+        const tabData = {
+            id: tabId,
+            title: tabItemElement.querySelector('.tab-title').textContent,
+            url: tabItemElement.querySelector('.tab-url').textContent,
+            favIconUrl: tabItemElement.querySelector('.tab-favicon').src,
+            active: tabItemElement.querySelector('.active-indicator') !== null,
+            pinned: tabItemElement.querySelector('.pinned-indicator') !== null
+        };
+        
+        const parentElement = tabItemElement.parentElement;
+        const nextSibling = tabItemElement.nextSibling;
+        const wasSelected = this.selectedTabs.has(tabId);
+        
+        // Remove from UI immediately for better UX
+        tabItemElement.remove();
+        
+        // Remove from selectedTabs if it was selected
+        this.selectedTabs.delete(tabId);
+        
+        // Close the actual tab
+        chrome.tabs.remove(tabId, () => {
+            if (chrome.runtime.lastError) {
+                console.error('Error closing tab:', chrome.runtime.lastError);
+                
+                // Restore the tab item to the UI
+                const restoredTabItem = this.createTabItem(tabData);
+                
+                // Re-insert at the same position
+                if (nextSibling) {
+                    parentElement.insertBefore(restoredTabItem, nextSibling);
+                } else {
+                    parentElement.appendChild(restoredTabItem);
+                }
+                
+                // Restore selection state
+                if (wasSelected) {
+                    this.selectedTabs.add(tabId);
+                }
+                
+                // Show error message to user
+                this.showErrorMessage(`Failed to close tab: ${tabData.title}`);
+                
+                // Optional: Add visual feedback to indicate the error
+                restoredTabItem.classList.add('tab-close-error');
+                setTimeout(() => {
+                    restoredTabItem.classList.remove('tab-close-error');
+                }, 3000);
+            }
+        });
+    }
+
+    showErrorMessage(message) {
+        // Create or update error message element
+        let errorElement = document.querySelector('.error-message');
+        
+        if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'error-message';
+            
+            // Insert at the top of the popup
+            const popupContainer = document.querySelector('.popup-container') || document.body;
+            popupContainer.insertBefore(errorElement, popupContainer.firstChild);
+        }
+        
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            errorElement.style.display = 'none';
+        }, 5000);
+    }
+
+    // Optional: Add method to manually dismiss error
+    dismissError() {
+        const errorElement = document.querySelector('.error-message');
+        if (errorElement) {
+            errorElement.style.display = 'none';
+        }
     }
 
     toggleTabSelection(tabId, isSelected) {
@@ -263,5 +357,5 @@ class TabsToMarkdown {
 
 // Initialize the extension when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new TabsToMarkdown();
+    new Tabs2Markdown();
 });
