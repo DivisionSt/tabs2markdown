@@ -2,19 +2,19 @@
 
 ## 📁 Files to Create
 
-Create a new folder called `tabs-to-markdown` and add these files:
+Create a new folder called `tabs2markdown` and add these files:
 
 ### 1. manifest.json
 ```json
 {
   "manifest_version": 3,
-  "name": "Tabs to Markdown",
+  "name": "Tabs2Markdown",
   "version": "1.0",
   "description": "Convert Chrome tabs to markdown format with search and selection features",
   "permissions": ["tabs"],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Tabs to Markdown"
+    "default_title": "Tabs2Markdown"
   },
   "icons": {
     "16": "icon16.png",
@@ -45,7 +45,7 @@ If you don't want to create icons, you can remove the "icons" section from manif
 
 1. **Create the folder structure:**
    ```
-   tabs-to-markdown/
+   tabs2markdown/
    ├── manifest.json
    ├── popup.html
    ├── popup.css
@@ -65,12 +65,12 @@ If you don't want to create icons, you can remove the "icons" section from manif
 
 4. **Load the extension:**
    - Click "Load unpacked"
-   - Select your `tabs-to-markdown` folder
+   - Select your `tabs2markdown` folder
    - The extension should appear in your extensions list
 
 5. **Pin the extension (recommended):**
    - Click the puzzle piece icon in the Chrome toolbar
-   - Find "Tabs to Markdown" and click the pin icon
+   - Find "Tabs2Markdown" and click the pin icon
 
 ## ✨ Features
 
