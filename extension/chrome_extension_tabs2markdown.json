@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Tabs to Markdown",
+  "name": "Tabs2Markdown",
   "version": "1.0",
   "description": "Convert Chrome tabs to markdown format with search and selection features",
   "permissions": ["tabs"],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Tabs to Markdown"
+    "default_title": "Tabs2Markdown"
   },
   "icons": {
     "16": "icon16.png",
