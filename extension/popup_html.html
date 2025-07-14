@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Tabs to Markdown</h1>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search tabs..." />
+                <button id="clearSearch">×</button>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="selection-controls">
+                <button id="selectAll">Select All</button>
+                <button id="selectNone">Select None</button>
+                <button id="selectVisible">Select Visible</button>
+            </div>
+            <div class="count-display">
+                <span id="selectedCount">0</span> of <span id="totalCount">0</span> selected
+            </div>
+        </div>
+        
+        <div class="tabs-container">
+            <div id="tabsList"></div>
+        </div>
+        
+        <div class="footer">
+            <button id="exportButton" class="export-btn" disabled>
+                Export Selected Tabs
+            </button>
+        </div>
+        
+        <div id="outputModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Markdown Output</h2>
+                    <button id="closeModal" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="markdownOutput" readonly></textarea>
+                    <div class="modal-footer">
+                        <button id="copyToClipboard" class="copy-btn">Copy to Clipboard</button>
+                        <button id="downloadFile" class="download-btn">Download as File</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
