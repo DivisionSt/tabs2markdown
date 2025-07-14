@@ -1,74 +1,24 @@
 # Chrome Extension Installation Instructions
 
-## 📁 Files to Create
+## 📁 Clone repository
 
-Create a new folder called `tabs2markdown` and add these files:
-
-### 1. manifest.json
-```json
-{
-  "manifest_version": 3,
-  "name": "Tabs2Markdown",
-  "version": "1.0",
-  "description": "Convert Chrome tabs to markdown format with search and selection features",
-  "permissions": ["tabs"],
-  "action": {
-    "default_popup": "popup.html",
-    "default_title": "Tabs2Markdown"
-  },
-  "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
-  }
-}
-```
-
-### 2. popup.html
-Copy the HTML content from the popup.html artifact above.
-
-### 3. style.css
-Copy the CSS content from the style.css artifact above.
-
-### 4. popup.js
-Copy the JavaScript content from the popup.js artifact above.
-
-### 5. Icons (Optional)
-You can create simple icons or use placeholder icons:
-- **icon16.png** (16x16 pixels)
-- **icon48.png** (48x48 pixels)  
-- **icon128.png** (128x128 pixels)
-
-If you don't want to create icons, you can remove the "icons" section from manifest.json.
+Clone the repository to your local filesystem
 
 ## 🚀 Installation Steps
 
-1. **Create the folder structure:**
-   ```
-   tabs2markdown/
-   ├── manifest.json
-   ├── popup.html
-   ├── style.css
-   ├── popup.js
-   └── icons/ (optional)
-       ├── icon16.png
-       ├── icon48.png
-       └── icon128.png
-   ```
-
-2. **Open Chrome Extensions page:**
+1. **Open Chrome Extensions page:**
    - Go to `chrome://extensions/`
    - Or click the three dots menu → More tools → Extensions
 
-3. **Enable Developer Mode:**
+2. **Enable Developer Mode:**
    - Toggle the "Developer mode" switch in the top right corner
 
-4. **Load the extension:**
+3. **Load the extension:**
    - Click "Load unpacked"
-   - Select your `tabs2markdown` folder
+   - Select your `tabs2markdown` folder (note, not the repository root, but the nested `tabs2markdown` folder)
    - The extension should appear in your extensions list
 
-5. **Pin the extension (recommended):**
+4. **Pin the extension (recommended):**
    - Click the puzzle piece icon in the Chrome toolbar
    - Find "Tabs2Markdown" and click the pin icon
 
@@ -76,10 +26,12 @@ If you don't want to create icons, you can remove the "icons" section from manif
 
 - **Search tabs**: Type to filter tabs by title or URL
 - **Select specific tabs**: Check/uncheck individual tabs
+- **Option to close tabs from the list**: Click the `x` to close a tab
 - **Bulk selection**: Select all, none, or only visible tabs
 - **Export to markdown**: Generate `[Title](URL)` format
 - **Copy to clipboard**: One-click copying
 - **Download as file**: Save as `.md` file
+- **Option to close tabs after export**: Check the box before exporting to close tabs
 - **Visual indicators**: Shows active tabs (green dot) and pinned tabs (📌)
 - **Responsive design**: Clean, modern interface
 
