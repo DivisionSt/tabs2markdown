@@ -27,8 +27,8 @@ Create a new folder called `tabs2markdown` and add these files:
 ### 2. popup.html
 Copy the HTML content from the popup.html artifact above.
 
-### 3. popup.css
-Copy the CSS content from the popup.css artifact above.
+### 3. style.css
+Copy the CSS content from the style.css artifact above.
 
 ### 4. popup.js
 Copy the JavaScript content from the popup.js artifact above.
@@ -48,7 +48,7 @@ If you don't want to create icons, you can remove the "icons" section from manif
    tabs2markdown/
    ├── manifest.json
    ├── popup.html
-   ├── popup.css
+   ├── style.css
    ├── popup.js
    └── icons/ (optional)
        ├── icon16.png

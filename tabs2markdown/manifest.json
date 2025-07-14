@@ -5,12 +5,24 @@
   "description": "Convert Chrome tabs to markdown format with search and selection features",
   "permissions": ["tabs"],
   "action": {
-    "default_popup": "popup_html.html",
+    "default_popup": "popup.html",
     "default_title": "Tabs2Markdown"
   },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "content_scripts": [
+        {
+            "matches": [
+                "*://*/*.*",
+                "file:///*/*.*"
+            ],
+            "css": ["style.css"],
+            "js": ["popup.js"],
+            "run_at": "document_start",
+            "all_frames": true
+        }
+    ]
 }
