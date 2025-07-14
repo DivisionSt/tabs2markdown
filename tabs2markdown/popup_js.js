@@ -310,11 +310,17 @@ class Tabs2Markdown {
         try {
             await navigator.clipboard.writeText(output.value);
             this.showNotification('Copied to clipboard!');
+            
+            // Check if tabs should be closed after export
+            await this.handlePostExportTabClosing();
         } catch (err) {
             // Fallback for older browsers
             output.select();
             document.execCommand('copy');
             this.showNotification('Copied to clipboard!');
+            
+            // Check if tabs should be closed after export
+            await this.handlePostExportTabClosing();
         }
     }
 
@@ -330,6 +336,94 @@ class Tabs2Markdown {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         this.showNotification('File downloaded!');
+        
+        // Check if tabs should be closed after export
+        this.handlePostExportTabClosing();
+    }
+
+    async handlePostExportTabClosing() {
+        const closeTabsCheckbox = document.getElementById('closeTabsAfterExport');
+        
+        if (closeTabsCheckbox && closeTabsCheckbox.checked) {
+            await this.closeSelectedTabs();
+        }
+    }
+
+    async closeSelectedTabs() {
+        const selectedTabIds = Array.from(this.selectedTabs);
+        const failedTabs = [];
+        
+        // Don't close the last tab or active tab in the current window to prevent closing the window
+        try {
+            const currentWindow = await chrome.windows.getCurrent();
+            const currentWindowTabs = await chrome.tabs.query({ windowId: currentWindow.id });
+            
+            // Filter out tabs that shouldn't be closed
+            const tabsToClose = selectedTabIds.filter(tabId => {
+                const tab = this.tabs.find(t => t.id === tabId);
+                // Don't close if it's the only tab in the window or if it's pinned
+                return tab && !tab.pinned && currentWindowTabs.length > 1;
+            });
+            
+            if (tabsToClose.length === 0) {
+                this.showNotification('No tabs were closed (pinned tabs or last tab in window)');
+                return;
+            }
+            
+            // Close tabs one by one to handle errors gracefully
+            for (const tabId of tabsToClose) {
+                try {
+                    await new Promise((resolve, reject) => {
+                        chrome.tabs.remove(tabId, () => {
+                            if (chrome.runtime.lastError) {
+                                reject(chrome.runtime.lastError);
+                            } else {
+                                resolve();
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error(`Failed to close tab ${tabId}:`, error);
+                    failedTabs.push(tabId);
+                }
+            }
+            
+            // Update the UI by removing closed tabs
+            const successfullyClosedTabs = tabsToClose.filter(id => !failedTabs.includes(id));
+            
+            if (successfullyClosedTabs.length > 0) {
+                // Remove closed tabs from our data structures
+                successfullyClosedTabs.forEach(tabId => {
+                    this.tabs = this.tabs.filter(tab => tab.id !== tabId);
+                    this.selectedTabs.delete(tabId);
+                });
+                
+                // Update the UI
+                this.filteredTabs = this.tabs.filter(tab => 
+                    this.filteredTabs.some(ft => ft.id === tab.id)
+                );
+                
+                this.renderTabs();
+                this.updateCounts();
+                this.updateExportButton();
+                
+                const closedCount = successfullyClosedTabs.length;
+                const message = failedTabs.length > 0 
+                    ? `${closedCount} tabs closed, ${failedTabs.length} failed`
+                    : `${closedCount} tabs closed`;
+                
+                this.showNotification(message);
+            } else if (failedTabs.length > 0) {
+                this.showErrorMessage(`Failed to close ${failedTabs.length} tabs`);
+            }
+            
+            // Close the modal after processing
+            this.closeModal();
+            
+        } catch (error) {
+            console.error('Error closing tabs:', error);
+            this.showErrorMessage('Error occurred while closing tabs');
+        }
     }
 
     showNotification(message) {
