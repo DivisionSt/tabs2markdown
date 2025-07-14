@@ -1,3 +1,9 @@
+# Why this Extension?
+I find I often end up with an overly cluttered tab bar in Chrome. As an avid Obsidian user, I developed this extension to help me transition these select tabs from my browser to my Obsidian vault where they can be referenced again any time.
+
+The thing I like about this extension is how it grabs the Title of each tab and builds it into a Markdown link that is ready to paste into Obsidian.
+
+
 # Chrome Extension Installation Instructions
 
 ## 📁 Clone repository
